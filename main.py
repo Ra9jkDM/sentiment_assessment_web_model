@@ -3,7 +3,9 @@ import time
 import pandas as pd
 import io
 
-from router import requests_distributor
+# from router import requests_distributor
+# from router import api
+from routes import api
 
 
 class WebServer:
@@ -28,10 +30,10 @@ class WebServer:
 
     def _get_request(self, conn):
         data = conn.recv(1024) 
-        print(data)
+        # print(data)
 
         content_len = int(self._substr(data, b'Content-Length:', b'\r\n'))
-        print('Content len', content_len)
+        # print('Content len', content_len)
 
         start = data.index(b'\r\n\r\n')
         content_len-=len(data) - start
@@ -62,7 +64,7 @@ class WebServer:
 
 
 if __name__ == '__main__':
-    server = WebServer('127.0.0.1', 8089, requests_distributor)
+    server = WebServer('127.0.0.1', 8088, api.requests_distributor)
     server.run()
     # clear port: 
     # fuser -k 8088/udp

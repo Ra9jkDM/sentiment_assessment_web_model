@@ -25,8 +25,9 @@ class WebServer:
                  print(f"Connected by {addr}")
                  data, content = self._get_request(conn)
                  req_type, url = self._get_type_and_url(data)
-                 self.requests_distributor_func(conn, req_type, url, content)
-                 conn.close()
+                 close = self.requests_distributor_func(conn, req_type, url, content)
+                 if close:
+                    conn.close()
 
     def _get_request(self, conn):
         data = conn.recv(1024) 

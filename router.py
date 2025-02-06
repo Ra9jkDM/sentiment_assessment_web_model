@@ -12,17 +12,18 @@ class Router:
         self.prefix = prefix
         self.routes = []
     
-    def get(self, url):
-        return self._abs_func('GET', url)
+    def get(self, url, auto_close=True):
+        return self._abs_func('GET', url, auto_close)
 
-    def post(self, url):
-        return self._abs_func('POST', url)
+    def post(self, url, auto_close=True):
+        return self._abs_func('POST', url, auto_close)
 
-    def _abs_func(self, req_type, url):
+    def _abs_func(self, req_type, url, auto_close=True):
         def register(func):
             self.routes.append(Routes(req_type, self.prefix+url, func))
             def mapper(conn, *args, **kwargs):
-                return func(conn, *args, **kwargs)
+                func(conn, *args, **kwargs)
+                return auto_close
             return mapper
         return register
 
@@ -30,10 +31,11 @@ class Router:
         print(self.routes, req_type, url)
         for i in self.routes:
             if i.req_type.upper() == req_type.upper() and i.url == url:
-                i.func(conn, content)
+                return i.func(conn, content)
         else:
             res_404 = create_response(404, 'NotFound', '')
             conn.sendall(res_404)
+            return True
 
 
 

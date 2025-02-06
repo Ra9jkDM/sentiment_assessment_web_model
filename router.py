@@ -44,3 +44,9 @@ def create_response(status, info, body):
         'Content-Type: application/json; charset=utf-8\r\n' +\
         f'Content-Length: {len(body)}\r\n\n' + body
     return res.encode('utf-8')
+
+def create_response_file(status, info, json_body):
+    res = b'HTTP/1.1 '+str(status).encode('utf-8')+b' '+str(info).encode('utf-8')+b'\r\n' +\
+        b'Content-Type: application/json; charset=utf-8\r\n' +\
+        b'Content-Length: '+str(len(json_body)).encode('utf-8')+b'\r\n\n' + json_body
+    return res

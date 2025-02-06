@@ -21,13 +21,13 @@ class WebServer:
         while True:
             conn, addr = self.sock.accept()
 
-            with conn:
-                 print(f"Connected by {addr}")
-                 data, content = self._get_request(conn)
-                 req_type, url = self._get_type_and_url(data)
-                 close = self.requests_distributor_func(conn, req_type, url, content)
-                 if close:
-                    conn.close()
+            print(f"Connected by {addr}")
+            data, content = self._get_request(conn)
+            req_type, url = self._get_type_and_url(data)
+            close = self.requests_distributor_func(conn, req_type, url, content)
+            if close:
+               print('Connection close')
+               conn.close()
 
     def _get_request(self, conn):
         data = conn.recv(1024) 
@@ -44,7 +44,7 @@ class WebServer:
             tmp = conn.recv(1024) 
             content += tmp
             content_len -= len(tmp)
-        
+        print(content)
         return data[:start], content
 
     def _substr(self, text, start_str, end_str):
@@ -61,7 +61,6 @@ class WebServer:
         data = data.split(' ')
         return data[0], data[1]
     
-
 
 
 if __name__ == '__main__':

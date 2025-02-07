@@ -18,7 +18,6 @@ def predict(conn, content):
     if 'text' in data:
         pred = predict_one_text(data['text'])
         res = create_response(200, 'OK', str(pred))
-        print(res)
         conn.sendall(res)
     else:
         res = create_response(404, 'Wrong json request', '{"text": "some text example"}')
@@ -30,8 +29,8 @@ def predict_table(conn, content):
     df = to_dataframe(file, extension)
 
     if type(df) != type(None):
-        print(df.info())
-        print(df.head())
+        # print(df.info())
+        # print(df.head())
         add_task(df, save_connection(conn)(return_results))
     else:
         res = create_response(404, 'Wrong file', '{"text": "Error loading file"}')

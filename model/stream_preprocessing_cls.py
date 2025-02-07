@@ -68,13 +68,6 @@ class BackgroundProcessing:
         tokens = data_preprocessing.text2numbers(clear_text, self.word_dict)
         return clear_text, tokens
 
-    # def preprocess_data_worker(self, data, task_name, part):
-    #     text = data.apply(self._preprocess_text(data.columns[0]), axis=1)
-    #     self.lock.acquire()
-    #     self.preprocessed_data[f'{task_name}_{part}'] = text
-    #     self.lock.release()
-    #     # print(self.preprocessed_data)
-
     def preprocess_data_worker(self, data, part):
         text = data.apply(self._preprocess_text(data.columns[0]), axis=1)
         self.lock.acquire()
@@ -94,7 +87,7 @@ class BackgroundProcessing:
                     thread_list[i].start()
 
                 for i in range(self.MAX_CORES):
-                    print('MulT', i)
+                    # print('MulT', i)
                     thread_list[i].join()
 
                 data = self.join_results()
@@ -112,7 +105,7 @@ class BackgroundProcessing:
         return all_data
 
     def create_and_start_main_process(self):
-        print('Create main thread')
+        # print('Create main thread')
         self.main_thread = threading.Thread(target=self.run_data_preprocess)
         self.main_thread.start()
         # main_thread.join()

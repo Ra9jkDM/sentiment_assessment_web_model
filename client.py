@@ -3,6 +3,8 @@ import json
 import pandas as pd
 import io
 
+import asyncio
+
 API = 'http://127.0.0.1:8089/api/'
 
 def get():
@@ -43,8 +45,14 @@ def main():
     # get()
     # post({'test': 'OK'})
 
+    post_text()
     post_file()
-    # post_text()
+    post_text()
+
+async def async_main():
+    await asyncio.to_thread(post_file)
+    await asyncio.to_thread(post_text)
 
 if __name__ == '__main__':
-    main()
+    # main()
+    asyncio.run(async_main())

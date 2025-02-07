@@ -2,9 +2,6 @@ import socket
 import time
 import pandas as pd
 import io
-
-# from router import requests_distributor
-# from router import api
 from routes import api
 
 

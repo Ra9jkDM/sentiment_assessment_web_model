@@ -26,7 +26,7 @@ def predict(df, row_name):
     json_data = {"rows_amount": df.shape[0], 
                 "positive": _get_result_amount(df, 1),
                 "negative": _get_result_amount(df, 0),
-                "unknown": _get_result_amount(df, np.nan)}
+                "unknown": int(df[PRED].isna().sum())}
     return df, json_data
 
 def _get_result_amount(df, exodus):
@@ -35,6 +35,12 @@ def _get_result_amount(df, exodus):
 def predict_text(bg, text):
     clear_text, tokens = bg.preprocess_simple_text(text)
     output = -1
+
+    if len(tokens) == 0:
+        return {'text': text,
+            'clear_text': clear_text,
+            'pred': -999, 
+            'pred_word': 'unknown'}
     with torch.no_grad():
         X = torch.IntTensor([tokens]).to(device)
         output = model(X)

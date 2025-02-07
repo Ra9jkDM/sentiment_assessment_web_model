@@ -42,14 +42,18 @@ class OrderedDataLoader:
             index = [i[1] for i in data]
             x = self._make_data_same_len(x)
             
-            return torch.IntTensor(x), index
+            if type(x) != type(None):
+                return torch.IntTensor(x), index
+            else:
+                raise StopIteration
         else:
             raise StopIteration
 
 
     def _make_data_same_len(self, batch):
-        return set_text_len(batch, len(batch[-1]))
-
+        if len(batch) != 0:
+            return set_text_len(batch, len(batch[-1]))
+    
 def set_text_len(texts, max_len):
     array = np.zeros([len(texts), max_len])
 

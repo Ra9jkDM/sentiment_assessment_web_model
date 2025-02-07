@@ -51,7 +51,4 @@ def return_results(conn, data, json_data):
     conn.sendall(res)
     conn.close()
 
-    # addTask(task, conn) -> do task, send result, close conn
-    # bg multithreading work_enque
-
 

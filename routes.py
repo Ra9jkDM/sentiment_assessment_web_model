@@ -1,7 +1,8 @@
 from router import Router, create_response, create_response_file
 from helpers.file_loader import get_file
 from helpers.converter import to_dataframe, to_bytes
-from model.model_service import add_task
+from model.model_service import add_task, predict_one_text
+import json
 
 api = Router(prefix='/api') 
 
@@ -13,7 +14,15 @@ def main(conn, content):
 
 @api.post('/predict')
 def predict(conn, content):
-    pass
+    data = json.loads(content.decode('unicode_escape'))
+    if 'text' in data:
+        pred = predict_one_text(data['text'])
+        res = create_response(200, 'OK', str(pred))
+        print(res)
+        conn.sendall(res)
+    else:
+        res = create_response(404, 'Wrong json request', '{"text": "some text example"}')
+        conn.sendall(res)
 
 @api.post('/predict_table', auto_close=False)
 def predict_table(conn, content):
@@ -37,16 +46,10 @@ def save_connection(conn):
         return mapper
     return map_func
 
-def return_results(conn, data):
-    print(type(data))
+def return_results(conn, data, json_data):
     tmp = to_bytes(data)
-    print(tmp, len(tmp.getvalue()))
-    print(tmp.getvalue(), type(tmp.getvalue()))
-    res1 = create_response(200, 'OK', '{"text": "preprocessed file", "data":"file"}')
-    res = create_response_file(200, 'OK', b'{"text": "stat ok", "file": "0"} END'+tmp.getvalue())
-    print(res)
+    res = create_response_file(200, 'OK', str(json_data).encode('utf-8')+b' END'+tmp.getvalue())
     conn.sendall(res)
-    # conn.sendall(res1)
     conn.close()
 
     # addTask(task, conn) -> do task, send result, close conn

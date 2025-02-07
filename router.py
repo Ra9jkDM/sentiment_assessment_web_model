@@ -42,8 +42,9 @@ class Router:
 def create_response(status, info, body):
     res = f'HTTP/1.1 {status} {info}\r\n' +\
         'Content-Type: application/json; charset=utf-8\r\n' +\
-        f'Content-Length: {len(body)}\r\n\n' + body
-    return res.encode('utf-8')
+        f'Content-Length: '
+    body = body.encode('utf-8')
+    return res.encode('utf-8') + str(len(body)).encode('utf-8') + b'\r\n\n' + body
 
 def create_response_file(status, info, json_body):
     res = b'HTTP/1.1 '+str(status).encode('utf-8')+b' '+str(info).encode('utf-8')+b'\r\n' +\

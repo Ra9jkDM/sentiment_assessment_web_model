@@ -44,7 +44,7 @@ class WebServer:
             tmp = conn.recv(1024) 
             content += tmp
             content_len -= len(tmp)
-        print(content)
+        # print(content)
         return data[:start], content
 
     def _substr(self, text, start_str, end_str):
@@ -64,7 +64,7 @@ class WebServer:
 
 
 if __name__ == '__main__':
-    server = WebServer('127.0.0.1', 8088, api.requests_distributor)
+    server = WebServer('127.0.0.1', 8089, api.requests_distributor)
     server.run()
     # clear port: 
     # fuser -k 8088/udp

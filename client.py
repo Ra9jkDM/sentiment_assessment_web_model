@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import io
 
-API = 'http://127.0.0.1:8088/api/'
+API = 'http://127.0.0.1:8089/api/'
 
 def get():
     r = requests.get(API)
@@ -15,15 +15,22 @@ def post(data):
     print(r)
     print(r.content)
 
+def post_text():
+    r = requests.post(API+'predict', json={'text': 'Когда же мой рабочий день кончится?'})
+    print(r)
+    print(r.content)
+    data = r.text #.decode('utf-8')
+    print(data)
+
 def post_file():
     file = {'upload_f': open('files/test_ml_3.xlsx', 'rb')} # csv
     r = requests.post(API+'predict_table', files=file, data={"text": "some text"}, timeout=10*60) # in seconds
     print(r)
     data = r.content
-    print(data)
+    # print(data)
     sep = b'END'
     start = data.index(sep)
-    print(json.loads(data[:start]))
+    print(json.loads(data[:start].decode('utf-8').replace('\'', '"')))
 
     file = data[start+len(sep):]
     df = pd.read_excel(io.BytesIO(file), engine="openpyxl")
@@ -35,7 +42,9 @@ def post_file():
 def main():
     # get()
     # post({'test': 'OK'})
+
     post_file()
+    # post_text()
 
 if __name__ == '__main__':
     main()

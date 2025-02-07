@@ -98,9 +98,8 @@ class BackgroundProcessing:
                     thread_list[i].join()
 
                 data = self.join_results()
-                # notify NN
-                result = self.pred_func(data, row_name=self.TOKENS)
-                task.func(data) # ToDo
+                result = self.pred_func(data, row_name=self.TOKENS) # notify NN
+                task.func(*result)
             else:
                 break
         

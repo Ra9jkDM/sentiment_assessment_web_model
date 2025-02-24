@@ -39,7 +39,7 @@ def predict_text(bg, text):
     if len(tokens) == 0:
         return {'text': text,
             'clear_text': clear_text,
-            'pred': -999, 
+            'pred': -1, 
             'pred_word': 'unknown'}
     with torch.no_grad():
         X = torch.IntTensor([tokens]).to(device)

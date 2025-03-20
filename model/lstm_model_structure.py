@@ -25,6 +25,6 @@ class LSTM(nn.Module):
         return output
 
 setattr(__main__, "LSTM", LSTM)
-model = torch.load('model/data/e5_lstm_web.pt', weights_only=False)
+model = torch.load('model/data/e5_lstm_web.pt', weights_only=False) # map_location=torch.device('cpu')
 model.eval()
 model = model.to(device)

@@ -123,6 +123,9 @@ def text2numbers(text, dict_):
     for i in text:
         if i in dict_.keys():
             sequence.append(dict_[i])
+            
+    if len(sequence) == 0:
+        sequence = [dict_['__pad__']]
 
     return sequence
 

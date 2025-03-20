@@ -3,11 +3,13 @@ import io
 
 def to_dataframe(file, ext):
     df = None
-    if ext == 'xlsx':
-        df = pd.read_excel(io.BytesIO(file), engine="openpyxl")
-    elif ext == 'csv':
-        df = pd.read_csv(io.BytesIO(file))
-    
+    try:
+        if ext == 'xlsx':
+            df = pd.read_excel(io.BytesIO(file), engine="openpyxl")
+        elif ext == 'csv':
+            df = pd.read_csv(io.BytesIO(file))
+    except:
+        print('Corrupted file')
     return df
 
 def to_bytes(dataframe):

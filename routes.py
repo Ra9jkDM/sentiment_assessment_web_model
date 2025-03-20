@@ -14,9 +14,11 @@ def main(conn, content):
 
 @api.post('/predict')
 def predict(conn, content):
-    data = json.loads(content.decode('unicode_escape'))
-    if 'text' in data:
-        pred = predict_one_text(data['text'])
+    data = content.decode('unicode_escape')
+    start = len(b'\r\n\r\n{"text": "')
+    if len(data) >= start + 2:
+        text = data[start: -2]
+        pred = predict_one_text(text)
         res = create_response(200, 'OK', str(pred))
         conn.sendall(res)
     else:
@@ -27,8 +29,8 @@ def predict(conn, content):
 def predict_table(conn, content):
     file, extension = get_file(content)
     df = to_dataframe(file, extension)
-
-    if type(df) != type(None):
+    
+    if type(df) != type(None) and df.shape[0] != 0:
         # print(df.info())
         # print(df.head())
         add_task(df, save_connection(conn)(return_results))

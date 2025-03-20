@@ -27,6 +27,7 @@ def predict(df, row_name):
                 "positive": _get_result_amount(df, 1),
                 "negative": _get_result_amount(df, 0),
                 "unknown": int(df[PRED].isna().sum())}
+    print(json_data)
     return df, json_data
 
 def _get_result_amount(df, exodus):

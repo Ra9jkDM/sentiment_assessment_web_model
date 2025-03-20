@@ -6,6 +6,8 @@ import io
 
 API = 'http://127.0.0.1:8089/api/'
 
+# @pytest.skip(allow_module_level=True)
+
 def to_dict(req):
     return json.loads(req.text.replace("'", '"'))
 

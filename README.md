@@ -16,3 +16,4 @@ routes.py:
 #### Запуск тестов
 
     pytest
+    python -m pytest tests

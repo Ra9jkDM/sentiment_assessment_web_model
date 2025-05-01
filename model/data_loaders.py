@@ -1,18 +1,15 @@
 import torch
 from torch.utils.data import Dataset
 import numpy as np
+    
 
-class LenOrderDataset(Dataset):
+class SeriesDataset(Dataset):
     def __init__(self, inputs, targets):
-        self.data = zip(inputs, targets)
-        self.data = sorted(self.data, key=lambda x: len(x[0]))
-        
-        padding = 0 # если после очистки текста от отзыва ничего не осталось
-        for i in self.data:
-            if len(i[0]) == 0:
-                padding += 1
+        self.data = []
 
-        self.data = self.data[padding:]
+        for i, j in zip(inputs, targets):
+            if len(i) > 0:
+                self.data.append([i, j])
 
     def __len__(self):
         return len(self.data)
@@ -20,10 +17,12 @@ class LenOrderDataset(Dataset):
     def __getitem__(self, idx):
         return self.data[idx][0], self.data[idx][1]
 
-class OrderedDataLoader:
-    def __init__(self, dataset, batch_size):
+
+class SameLenDataLoader:
+    def __init__(self, dataset, batch_size, tokens_length):
         self.dataset = dataset
         self.batch_size = batch_size
+        self.tokens_length = tokens_length
         
         self.idx = 0
         
@@ -52,8 +51,8 @@ class OrderedDataLoader:
 
     def _make_data_same_len(self, batch):
         if len(batch) != 0:
-            return set_text_len(batch, len(batch[-1]))
-    
+            return set_text_len(batch, self.tokens_length)
+
 def set_text_len(texts, max_len):
     array = np.zeros([len(texts), max_len])
 

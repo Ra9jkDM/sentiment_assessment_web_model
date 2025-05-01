@@ -1,17 +1,17 @@
 import torch
 from model.lstm_model_structure import model, device
-from model.data_loaders import LenOrderDataset, OrderedDataLoader
+from torch.utils.data import TensorDataset, DataLoader
+from model.data_loaders import SameLenDataLoader, SeriesDataset
 import numpy as np
 
 TEXT_LEN = 10
 MAX_BATCH_SIZE = 5
-MAX_TEXT_LEN = -1 # ToDo
 PRED = 'pred'
 
 
 def predict(df, row_name):
-    data_ds = LenOrderDataset(df[row_name], df.index)
-    data_loader = OrderedDataLoader(data_ds,  batch_size=MAX_BATCH_SIZE)
+    data_ds = SeriesDataset(df[row_name], df.index)
+    data_loader = SameLenDataLoader(data_ds, batch_size=MAX_BATCH_SIZE, tokens_length=230)
 
     with torch.no_grad():
         for X, index in data_loader:
@@ -52,7 +52,3 @@ def predict_text(bg, text):
             'pred': int(output), 
             'pred_word': 'positive' if output == 1 else 'negative'}
 
-
-    # remove some row
-    # df[(df.row ==1)].count() # сформировать json для ответа
-    # positive/negativ/unknown(если после обработки не осталось ни одного слова)

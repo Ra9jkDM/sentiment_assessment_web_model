@@ -11,7 +11,7 @@ PRED = 'pred'
 
 def predict(df, row_name):
     data_ds = SeriesDataset(df[row_name], df.index)
-    data_loader = SameLenDataLoader(data_ds, batch_size=MAX_BATCH_SIZE, tokens_length=230)
+    data_loader = SameLenDataLoader(data_ds, batch_size=MAX_BATCH_SIZE, tokens_length=230, padding_idx=13335)
 
     with torch.no_grad():
         for X, index in data_loader:
@@ -23,10 +23,17 @@ def predict(df, row_name):
                 df.at[idx, PRED] = int(pred)
 
     df = df.drop([row_name], axis=1)
-    json_data = {"rows_amount": df.shape[0], 
-                "positive": _get_result_amount(df, 1),
-                "negative": _get_result_amount(df, 0),
-                "unknown": int(df[PRED].isna().sum())}
+
+    if PRED in df.columns:
+        json_data = {"rows_amount": df.shape[0], 
+                    "positive": _get_result_amount(df, 1),
+                    "negative": _get_result_amount(df, 0),
+                    "unknown": int(df[PRED].isna().sum())}
+    else:
+         json_data = {"rows_amount": df.shape[0], 
+                    "positive": 0,
+                    "negative": 0,
+                    "unknown": df.shape[0]}
     print(json_data)
     return df, json_data
 

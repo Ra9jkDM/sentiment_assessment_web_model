@@ -124,8 +124,8 @@ def text2numbers(text, dict_):
         if i in dict_.keys():
             sequence.append(dict_[i])
             
-    if len(sequence) == 0:
-        sequence = [dict_['__pad__']]
+    # if len(sequence) == 0:
+    #     sequence = [dict_['__pad__']]
 
     return sequence
 
@@ -145,8 +145,13 @@ if __name__ == '__main__':
     print(norm_form)
 
     word_dict = {}
-    with open('models/word_dict.json', 'r') as f:
+    with open('model/data/word_dict.json', 'r') as f:
         word_dict = json.loads(f.read())
 
+    result = text2numbers(norm_form, word_dict)
+    print(result)
+
+    norm_form = clear_text('хорошо')
+    print(norm_form)
     result = text2numbers(norm_form, word_dict)
     print(result)

@@ -19,10 +19,11 @@ class SeriesDataset(Dataset):
 
 
 class SameLenDataLoader:
-    def __init__(self, dataset, batch_size, tokens_length):
+    def __init__(self, dataset, batch_size, tokens_length, padding_idx):
         self.dataset = dataset
         self.batch_size = batch_size
         self.tokens_length = tokens_length
+        self.padding_idx = padding_idx
         
         self.idx = 0
         
@@ -51,17 +52,17 @@ class SameLenDataLoader:
 
     def _make_data_same_len(self, batch):
         if len(batch) != 0:
-            return set_text_len(batch, self.tokens_length)
+            return set_text_len(batch, self.tokens_length, self.padding_idx)
 
-def set_text_len(texts, max_len):
-    array = np.zeros([len(texts), max_len])
+def set_text_len(texts, max_len, padding_idx):
+    array = np.full([len(texts), max_len], padding_idx)
 
     i = 0
     for value in texts:
         tmp = max_len-len(value)
         tmp = tmp if tmp > 0 else 0
 
-        text = np.concatenate((value[:max_len], np.zeros(tmp)))
+        text = np.concatenate((value[:max_len], np.full(tmp, padding_idx)))
         array[i] = text
         i+=1
 

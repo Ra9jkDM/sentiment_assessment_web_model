@@ -18,7 +18,8 @@ def post(data):
     print(r.content)
 
 def post_text():
-    r = requests.post(API+'predict', json={'text': 'Когда же мой рабочий день кончится?'})
+    # r = requests.post(API+'predict', json={'text': 'Когда же мой рабочий день кончится?'})
+    r = requests.post(API+'predict', json={'text': 'обучение не очень'})
     print(r)
     print(r.content)
     data = r.text #.decode('utf-8')
@@ -26,6 +27,8 @@ def post_text():
 
 def post_file():
     file = {'upload_f': open('files/test_ml_3.xlsx', 'rb')} # csv
+    file = {'upload_f': open('tests/test_data/one_value.xlsx', 'rb')} # csv
+    # file = {'upload_f': open('tests/test_data/empty.csv', 'rb')} # csv
     r = requests.post(API+'predict_table', files=file, data={"text": "some text"}, timeout=10*60) # in seconds
     print(r)
     data = r.content
@@ -51,7 +54,7 @@ def main():
 
 async def async_main():
     await asyncio.to_thread(post_file)
-    await asyncio.to_thread(post_text)
+    # await asyncio.to_thread(post_text)
 
 if __name__ == '__main__':
     # main()

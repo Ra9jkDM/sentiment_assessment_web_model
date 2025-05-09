@@ -43,15 +43,15 @@ class BackgroundProcessing:
         
         for i in range(parts):
             if i + 1 == parts:
-                data.append(df[i*length:-1])
+                data.append(df[i*length:])
             else:
                 data.append(df[i*length:(i+1)*length])
                 
-            amount+=len(data[i])
+        #     amount+=len(data[i])
         
         # print('Amount:', amount)
         # for i, value in enumerate(data, start = 1):
-        #    print(f'Part {i}, data len: {len(value)}')
+        #    print(f'Part {i}, data len: {len(value)}', data[i])
 
         return data
 

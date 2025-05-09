@@ -33,6 +33,7 @@ def predict_table(conn, content):
     if type(df) != type(None) and df.shape[0] != 0:
         # print(df.info())
         # print(df.head())
+        print(df.tail())
         add_task(df, save_connection(conn)(return_results))
     else:
         res = create_response(404, 'Wrong file', '{"text": "Error loading file"}')

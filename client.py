@@ -27,7 +27,8 @@ def post_text():
 
 def post_file():
     file = {'upload_f': open('files/test_ml_3.xlsx', 'rb')} # csv
-    file = {'upload_f': open('tests/test_data/one_value.xlsx', 'rb')} # csv
+    file = {'upload_f': open('files/example_2.csv', 'rb')} # csv
+    # file = {'upload_f': open('tests/test_data/one_value.xlsx', 'rb')} # csv
     # file = {'upload_f': open('tests/test_data/empty.csv', 'rb')} # csv
     r = requests.post(API+'predict_table', files=file, data={"text": "some text"}, timeout=10*60) # in seconds
     print(r)

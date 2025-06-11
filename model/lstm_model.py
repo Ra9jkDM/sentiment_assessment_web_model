@@ -45,7 +45,7 @@ def predict_text(bg, text):
     output = -1
 
     if len(tokens) == 0:
-        return {'text': text,
+        return {'text': text.replace('\'', '').replace('"', ''),
             'clear_text': clear_text,
             'pred': -1, 
             'pred_word': 'unknown'}
@@ -54,7 +54,7 @@ def predict_text(bg, text):
         output = model(X)
         output = output.argmax().cpu()
 
-    return {'text': text,
+    return {'text': text.replace('\'', '').replace('"', ''),
             'clear_text': clear_text,
             'pred': int(output), 
             'pred_word': 'positive' if output == 1 else 'negative'}
